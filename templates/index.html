@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #loginForm, #registerForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login & Register</h1>
+
+    <!-- Buttons to toggle between forms -->
+    <button onclick="showForm('register')">Register</button>
+    <button onclick="showForm('login')">Login</button>
+
+    <!-- Register Form -->
+    <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        // Show form based on button click
+        function showForm(formType) {
+            // Show the register form if 'register' is passed, otherwise show login form
+            document.getElementById('registerForm').style.display = formType === 'register' ? 'block' : 'none';
+            document.getElementById('loginForm').style.display = formType === 'login' ? 'block' : 'none';
+        }
+
+        // Handle the registration form submission
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent the default form submission behavior
+            const username = document.getElementById('username').value;  // Get the username entered
+            const password = document.getElementById('password').value;  // Get the password entered
+            // Send the registration data to the server via a POST request
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },  // Specify that we are sending JSON data
+                body: JSON.stringify({ username, password })  // Send the username and password as JSON
+            });
+            const data = await response.json();  // Parse the JSON response from the server
+            alert(data.message);  // Show an alert with the server response message
+        });
+
+        // Handle the login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent the default form submission behavior
+            const username = document.getElementById('loginUsername').value;  // Get the username entered
+            const password = document.getElementById('loginPassword').value;  // Get the password entered
+            // Send the login data to the server via a POST request
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },  // Specify that we are sending JSON data
+                body: JSON.stringify({ username, password })  // Send the username and password as JSON
+            });
+            const data = await response.json();  // Parse the JSON response from the server
+            if (data.redirect) {
+                // If the server returns a redirect URL, navigate to that page (e.g., after successful login)
+                window.location.href = data.redirect;
+            } else {
+                alert(data.message);  // Show an alert with the server response message (error or success)
+            }
+        });
+    </script>
+</body>
+</html>

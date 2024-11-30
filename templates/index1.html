@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avatar Customizer: Choose and Dress Your Avatar</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+  <div id="title-container">
+    <!--h1>Avatar Customizer</h1>
+    <p>Choose and dress your avatar with virtual clothes</p-->
+  </div>
+
+  <div id="container">
+    <div id="left-panel">
+      
+      <button id="openCatalogueBtn">Open Your Catalogue</button>
+
+      
+      <div id="catalogue" style="display: none;">
+        <h2>Choose Your Clothes</h2>
+        <div class="clothes-item" data-model="tshirt">
+          <img src="tshirt.png" alt="T-shirt" />
+          <p>T-shirt</p>
+        </div>
+        <div class="clothes-item" data-model="set">
+          <img src="set.png" alt="Set" />
+          <p>Set</p>
+        </div>
+        <div class="clothes-item" data-model="leather-jacket-jeans">
+          <img src="Leather_Jacket_Jeans.png" alt="Leather Jacket and Jeans" />
+          <p> Jacket & Jeans</p>
+        </div>
+        <div class="clothes-item" data-model="knitted-top">
+          <img src="Knitted top.png" alt="Knitted Top" />
+          <p>Knitted Top</p>
+        </div>
+        <div class="clothes-item" data-model="color-tshirt">
+          <img src="Color_Tshirt.png" alt="Color T-shirt" />
+          <p>Color T-shirt</p>
+        </div>
+      
+      </div>
+    </div>
+
+    <div id="right-panel">
+      <a-scene>
+      
+        <a-light type="directional" position="5 5 5" intensity="2"></a-light>
+        <a-light type="ambient" intensity="0.4"></a-light>
+
+        <!-- Sol -->
+        <a-plane rotation="-90 0 0" width="60" height="60" color="#7BC8A4"></a-plane>
+
+       
+        <a-entity 
+            id="avatar"
+            gltf-model="avatar.gltf"  
+            rotation="0 0 0"            
+            scale="0.3 0.3 0.3">
+        </a-entity>
+
+       
+        <a-entity id="tshirt" 
+                  position="0 1.3 -10"       
+                  rotation="0 0 0"            
+                  scale="1.5 1.5 1.5"        
+                  gltf-model="#tshirt-model"  
+                  visible="false">
+        </a-entity>
+
+        
+        <a-entity id="color-tshirt" 
+                  position="0 1.3 -10"       
+                  rotation="0 0 0"            
+                  scale="1.5 1.5 1.5"        
+                  gltf-model="#color-tshirt-model"  
+                  visible="false">
+        </a-entity>
+
+        
+        <a-entity id="set" 
+                  position="0 1.3 -10"       
+                  rotation="0 0 0"            
+                  scale="1.5 1.5 1.5"        
+                  gltf-model="#set-model"  
+                  visible="false">
+        </a-entity>
+
+        
+        <a-entity id="leather-jacket-jeans" 
+                  position="0 1.3 -10"       
+                  rotation="0 0 0"            
+                  scale="1.5 1.5 1.5"        
+                  gltf-model="#leather-jacket-jeans-model"  
+                  visible="false">
+        </a-entity>
+
+       
+        <a-camera position="0 25 70">
+          <a-cursor></a-cursor>
+        </a-camera>
+
+        
+        <a-assets>
+          <a-asset-item id="tshirt-model" src="tshirt.png"></a-asset-item>
+          <a-asset-item id="color-tshirt-model" src="Color_Tshirt.png"></a-asset-item>
+          <a-asset-item id="set-model" src="set.png"></a-asset-item>
+          <a-asset-item id="leather-jacket-jeans-model" src="Leather_Jacket_Jeans.png"></a-asset-item>
+        </a-assets>
+      </a-scene>
+    </div>
+  </div>
+
+  <script>
+    
+    document.getElementById('openCatalogueBtn').addEventListener('click', function() {
+      var catalogue = document.getElementById('catalogue');
+    
+      catalogue.style.display = catalogue.style.display === 'none' ? 'block' : 'none';
+    });
+
+    
+    document.querySelectorAll('.clothes-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var model = item.getAttribute('data-model');
+        
+        
+        document.querySelectorAll('.clothes-item').forEach(function(visibleItem) {
+          var modelName = visibleItem.getAttribute('data-model');
+          document.querySelector(`#${modelName}`).setAttribute('visible', 'false');
+        });
+
+        
+        document.querySelector(`#${model}`).setAttribute('visible', 'true');
+      });
+    });
+
+    
+    let rotation = 0;
+    setInterval(function() {
+      rotation += 0.5;  
+      document.querySelector('#avatar').setAttribute('rotation', `0 ${rotation} 0`);
+    }, 20);
+  </script>
+  <!-- Navbar -->
+  <nav id="navbar">
+    <ul>
+      <li><a href="#title-container">Home</a></li>
+      <li><a href="#catalogue">Catalogue</a></li>
+      <li><a href="#right-panel">Avatar</a></li>
+    </ul>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <h3>Select Clothes</h3>
+    <div class="sidebar-item" data-model="tshirt">
+      <p>T-shirt</p>
+    </div>
+    <div class="sidebar-item" data-model="color-tshirt">
+      <p>Color T-shirt</p>
+    </div>
+    <div class="sidebar-item" data-model="set">
+      <p>Set</p>
+    </div>
+    <div class="sidebar-item" data-model="leather-jacket-jeans">
+      <p>Jacket & Jeans</p>
+    </div>
+  </div>
+
+
+  <div id="container">
+
+  </div>
+
+  <script>
+    // Sidebar interaction
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const model = item.getAttribute('data-model');
+
+        document.querySelectorAll('.clothes-item, .sidebar-item').forEach(el => {
+          const targetModel = el.getAttribute('data-model');
+          if (targetModel) {
+            document.querySelector(`#${targetModel}`).setAttribute('visible', 'false');
+          }
+        });
+
+        
+        document.querySelector(`#${model}`).setAttribute('visible', 'true');
+      });
+    });
+  </script>
+</body>
+</html>
